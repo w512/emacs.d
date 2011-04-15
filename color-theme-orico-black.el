@@ -1,4 +1,4 @@
-;;; Dark color theme useed in Original Coding. Created by nikolay@blohin.org
+;;; Dark color theme used in Original Coding. Created by nikolay@blohin.org
 
 ;; Add syntax highlighting for operators =====================================
 ;; Currently support for []|&!.+=-/%*,()<>{}
