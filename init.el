@@ -40,7 +40,7 @@
 
 
 ;; Hide scroll bar
- (scroll-bar-mode -1)
+(scroll-bar-mode -1)
 
 
 ;; Line numbers
@@ -54,10 +54,11 @@
 
 ;; Show the right border (M-x fci-mode)
 (require 'fill-column-indicator)
-(setq fci-handle-line-move-visual nil)
 (setq-default fill-column 79)
 (setq fci-style 'rule)
-
+(setq-default fci-rule-character ?|)
+;; turn on this option for all new buffers using python-mode
+;; (add-hook 'python-mode-hook 'fci-mode)
 
 ;; Line by line scrolling
 (setq scroll-step 1)

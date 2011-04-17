@@ -20,5 +20,15 @@ Installation
     git clone git://github.com/NikolayBlohin/emacs.d.git .emacs.d
 
 
+If you want only test my environment, without damage your settings:
+
+    cd ~
+
+    git clone git://github.com/NikolayBlohin/emacs.d.git test-emacs.d
+
+    emacs -q -l ~/test-emacs.d/init.el
+
+
+
 
 
