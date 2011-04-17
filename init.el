@@ -1,11 +1,74 @@
 ;; You should already installed:
 ;;    - pymacs
 ;;    - ropemacs
-;;    - color-theme
+;;    - emacs-goodies-el (for color-theme and tabbar)
+;;
+;;
+;; All hotkeys define in my config:
+;;   'F1' or 'M-x pylint'    - run pylint
+;;   'F2' or 'M-x fci-mode'  - show the right border
+;;   'C-c c'                 - duplicates the current line or region
+;;   'alt + [arrow keys]'    - frame navigation
+;;   'C-x C-u'               - upcase region
+;;   'C-x C-l'               - downcase region
+;;   'C-c <C-left|right>'    - tabbar backward|forward
+
+
 
 ;; Path to ma libs
 (add-to-list 'load-path "~/.emacs.d/")
 
+
+(custom-set-variables
+'(tool-bar-mode nil)            ;; Hide toolbar
+'(scroll-bar-mode nil)          ;; Hide scroll bar
+'(global-linum-mode t)          ;; Show line numbers
+'(scroll-step t)                ;; Line by line scrolling
+'(inhibit-startup-message t)    ;; Do not show a message at startup
+'(require-final-newline t)      ;; Put new line in file end
+'(iswitchb-mode t)              ;; Cool buffers switching
+)
+
+
+;; Show tabs (backward - 'C-c <C-left>', forward - 'C-c <C-right>')
+(require 'tabbar)
+(tabbar-mode t)
+
+
+;; Frame navigation alt + [arrow keys]
+(windmove-default-keybindings 'meta)
+
+
+;; Show the column and line numbers
+(setq line-number-mode t)
+(setq column-number-mode t)
+
+
+;; Cursor type
+(defun set-cursor ()
+  (setq cursor-in-non-selected-windows nil)
+  (setq cursor-type '(bar . 1)))
+(add-hook 'post-command-hook 'set-cursor)
+
+
+;; Setup the basic font Consolas
+(set-face-font 'default "-microsoft-Consolas-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
+
+
+;; Load a theme from a file
+(autoload 'color-theme-orico-black "color-theme-orico-black")
+(color-theme-orico-black) ;; and select this scheme
+
+
+;; If you want try other themes
+;; (require 'color-theme)     ;; loads "coloring module"
+;; (color-theme-initialize)   ;; load color schemes
+
+
+
+;; ===========================================================================
+;; ===========================   Python Settings   ===========================
+;; ===========================================================================
 
 ;; Initialize Python-mode
 (autoload 'python-mode "python-mode" "Python Mode." t)
@@ -26,53 +89,10 @@
 (setq ropemacs-enable-autoimport t)
 
 
-;; For run use 'M-x pylint'
+;; For run use 'M-x pylint' or 'F1'
 (autoload 'python-pylint "python-pylint")
 (autoload 'pylint "python-pylint")
-
-
-;; Navigate alt + 'arrow keys'
-(windmove-default-keybindings 'meta)
-
-
-;; Hide toolbar
-(tool-bar-mode -1)
-
-
-;; Hide scroll bar
-(scroll-bar-mode -1)
-
-
-;; Line numbers
-(global-linum-mode 1)
-
-
-;; Show the column and line numbers
-(setq line-number-mode t)
-(setq column-number-mode t)
-
-
-;; Show the right border (M-x fci-mode)
-(require 'fill-column-indicator)
-(setq-default fill-column 79)
-(setq fci-style 'rule)
-(setq-default fci-rule-character ?|)
-;; turn on this option for all new buffers using python-mode
-;; (add-hook 'python-mode-hook 'fci-mode)
-
-;; Line by line scrolling
-(setq scroll-step 1)
-
-
-;; Cursor type
-(defun set-cursor ()
-  (setq cursor-in-non-selected-windows nil)
-  (setq cursor-type '(bar . 1)))
-(add-hook 'post-command-hook 'set-cursor)
-
-
-;; Do not show a message at startup
-(setq inhibit-startup-message t)
+(global-set-key [f1] 'pylint)
 
 
 ;; 'Python-style' tabs
@@ -80,20 +100,17 @@
 (setq default-tab-width 4)
 
 
-;; Setup the basic font Consolas
-(set-face-font 'default "-microsoft-Consolas-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")
+;; Show the right border ('M-x fci-mode' or 'F2')
+(require 'fill-column-indicator)
+(setq-default fill-column 79)
+(setq fci-style 'rule)
+(setq-default fci-rule-character ?|)
+(global-set-key [f2] 'fci-mode)
+;; turn on this option for all new buffers using python-mode
+;; (add-hook 'python-mode-hook 'fci-mode)
 
 
-;; Load a theme from a file
-(autoload 'color-theme-orico-black "color-theme-orico-black")
-
-(require 'color-theme) ;; loads "coloring module"
-(color-theme-initialize) ;; load color schemes
-(color-theme-orico-black) ;; select a particular scheme
-
-
-
-;; Now I'm not using flymake =================================================
+;; Now I'm not using flymake
 ;;(when (load "flymake" t)
 ;;  (defun flymake-pylint-init ()
 ;;    (let* ((temp-file (flymake-init-create-temp-buffer-copy
@@ -107,11 +124,15 @@
 ;;               '("\\.py\\'" flymake-pylint-init)))
 ;;
 ;;(add-hook 'python-mode-hook 'flymake-mode)
+
 ;; ===========================================================================
 
 
 
-;; Duplicates the current line or region =====================================
+
+
+
+;; Duplicates the current line or region (C-c c)~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 (defun duplicate-current-line-or-region (arg)
   "Duplicates the current line or region ARG times.
 If there's no region, the current line will be duplicated. However, if
@@ -133,9 +154,9 @@ there's a region, all lines that region covers will be duplicated."
       (goto-char (+ origin (* (length region) arg) arg)))))
 
 (global-set-key (kbd "C-c c") 'duplicate-current-line-or-region)
-;; ===========================================================================
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 
-(put 'upcase-region 'disabled nil)
-
+(put 'upcase-region 'disabled nil)    ;; C-x C-u
+(put 'downcase-region 'disabled nil)  ;; C-x C-l

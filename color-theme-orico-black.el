@@ -47,11 +47,15 @@
      (font-lock-warning-face ((t (:bold t :foreground "#f57900"))))
      (font-lock-function-name-face ((t (:foreground "#ffff00"))))
 
+     ;; values ​​that are specific to Python ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      (py-decorators-face ((t (:foreground "#ad7fa8" :bold t))))
      (py-pseudo-keyword-face ((t (:foreground "#4FCFC5"))))
      (py-builtins-face ((t (:foreground "#4FCFC5"))))
      (font-lock-operator-face ((t (:foreground "#fcaf3e" ))))
      (py-class-name-face ((t (:foreground "#ffff00"  :bold t))))
+
+     ;; values ​​that are specific to Tabs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     (tabbar-selected ((t (:foreground "#FFA500" :background "#2E3436"))))
 
      (comint-highlight-input ((t (:italic t :bold t))))
      (comint-highlight-prompt ((t (:foreground "#8ae234"))))
