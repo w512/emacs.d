@@ -2,6 +2,7 @@
 ;;    - pymacs
 ;;    - ropemacs
 ;;    - emacs-goodies-el (for color-theme and tabbar)
+;;    - ECB (http://ecb.sourceforge.net)
 ;;
 ;;
 ;; All hotkeys define in my config:
@@ -14,19 +15,24 @@
 ;;   'C-c <C-left|right>'    - tabbar backward|forward
 
 
-
-;; Path to ma libs
+;; Path to my libs and scripts
 (add-to-list 'load-path "~/.emacs.d/")
 
 
+(require 'ecb)    ;; Emacs Code Browser
+
+
 (custom-set-variables
-'(tool-bar-mode nil)            ;; Hide toolbar
-'(scroll-bar-mode nil)          ;; Hide scroll bar
-'(global-linum-mode t)          ;; Show line numbers
-'(scroll-step t)                ;; Line by line scrolling
-'(inhibit-startup-message t)    ;; Do not show a message at startup
-'(require-final-newline t)      ;; Put new line in file end
-'(iswitchb-mode t)              ;; Cool buffers switching
+ '(ecb-options-version "2.32")
+ '(ecb-tip-of-the-day nil)
+ ;; '(ecb-auto-activate t)
+ '(tool-bar-mode nil)            ;; Hide toolbar
+ '(scroll-bar-mode nil)          ;; Hide scroll bar
+ '(global-linum-mode t)          ;; Show line numbers
+ '(scroll-step t)                ;; Line by line scrolling
+ '(inhibit-startup-message t)    ;; Do not show a message at startup
+ '(require-final-newline t)      ;; Put new line in file end
+ '(iswitchb-mode t)              ;; Cool buffers switching
 )
 
 
@@ -160,3 +166,4 @@ there's a region, all lines that region covers will be duplicated."
 
 (put 'upcase-region 'disabled nil)    ;; C-x C-u
 (put 'downcase-region 'disabled nil)  ;; C-x C-l
+
