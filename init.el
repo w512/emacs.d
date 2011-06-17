@@ -19,7 +19,13 @@
 (add-to-list 'load-path "~/.emacs.d/")
 
 
-(require 'ecb)    ;; Emacs Code Browser
+;; The guys from Canonical broken 'ecb' in Ubuntu 11.04
+;; (require 'ecb)    ;; Emacs Code Browser
+
+
+;; ecb alternative ('C-c s' - to run)
+(require 'sr-speedbar)
+(global-set-key (kbd "C-c s") 'sr-speedbar-toggle)
 
 
 (custom-set-variables
