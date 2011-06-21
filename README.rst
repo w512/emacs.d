@@ -10,6 +10,7 @@ Requirements
     * pymacs
     * ropemacs
     * color-theme
+    * auto-complete
 
 
 

@@ -2,7 +2,7 @@
 ;;    - pymacs
 ;;    - ropemacs
 ;;    - emacs-goodies-el (for color-theme and tabbar)
-;;    - ECB (http://ecb.sourceforge.net)
+;;    - auto-complete-el (for autocomplete)
 ;;
 ;;
 ;; All hotkeys define in my config:
@@ -19,19 +19,27 @@
 (add-to-list 'load-path "~/.emacs.d/")
 
 
-;; The guys from Canonical broken 'ecb' in Ubuntu 11.04
+;; The bad guys from Canonical broken 'ecb' in Ubuntu 11.04
 ;; (require 'ecb)    ;; Emacs Code Browser
 
 
 ;; ecb alternative ('C-c s' - to run)
+(custom-set-variables
+ '(speedbar-mode-specific-contents-flag t)
+ '(speedbar-show-unknown-files t)
+ '(speedbar-use-images nil))
 (require 'sr-speedbar)
 (global-set-key (kbd "C-c s") 'sr-speedbar-toggle)
 
 
+;; Autocomplete (requires installed 'auto-complete-el')
+(require 'auto-complete-config nil t) ;; don't break if not installed
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(setq ac-comphist-file  "~/.emacs.d/ac-comphist.dat")
+(ac-config-default)
+
+
 (custom-set-variables
- '(ecb-options-version "2.32")
- '(ecb-tip-of-the-day nil)
- ;; '(ecb-auto-activate t)
  '(tool-bar-mode nil)            ;; Hide toolbar
  '(scroll-bar-mode nil)          ;; Hide scroll bar
  '(global-linum-mode t)          ;; Show line numbers
@@ -40,6 +48,13 @@
  '(require-final-newline t)      ;; Put new line in file end
  '(iswitchb-mode t)              ;; Cool buffers switching
 )
+
+
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil)            ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't)                  ;; scroll window under mouse    
+(setq scroll-step 1)                                ;; keyboard scroll one line at a time
 
 
 ;; Show tabs (backward - 'C-c <C-left>', forward - 'C-c <C-right>')
