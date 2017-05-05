@@ -1,3 +1,7 @@
 *~
 auto-save-list/
 ac-comphist.dat
+semanticdb/
+ido.last
+.python-environments/
+elpa/
