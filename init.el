@@ -7,25 +7,19 @@
 
 ;;; Code:
 
-;; Path to my libs and scripts
-(add-to-list 'load-path "~/.emacs.d/libs/")
-(add-to-list 'load-path "~/.emacs.d/scripts/")
-(add-to-list 'load-path "~/.emacs.d/elpa/")
-
-
-;; add packages repository
+;; General repository for packages
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(package-initialize)
 
-
-
+;; Path to my libs and scripts
+(add-to-list 'load-path "~/.emacs.d/elpa/")
+(add-to-list 'load-path "~/.emacs.d/libs/")
+(add-to-list 'load-path "~/.emacs.d/scripts/")
 
 ;; list the packages you want
 (setq package-list
       '(python-mode ido sr-speedbar paren auto-complete flycheck))
-
 
 ;; activate all the packages
 (package-initialize)
@@ -40,16 +34,11 @@
         (package-install package)))
 
 
-
-
-
-
-
-
 ;;(require 'ido)
 ;;(require 'python-mode)
 ;;(require 'sr-speedbar)
 ;;(require 'paren)
+
 
 (ac-config-default)               ;; turn on auto-complete
 (global-flycheck-mode)            ;; turn on syntax checking
