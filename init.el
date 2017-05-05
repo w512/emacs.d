@@ -14,15 +14,42 @@
 
 
 ;; add packages repository
+(require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
-(require 'package)
-(require 'ido)
-(require 'python-mode)
-(require 'sr-speedbar)
-(require 'paren)
+
+
+
+;; list the packages you want
+(setq package-list
+      '(python-mode ido sr-speedbar paren))
+
+
+;; activate all the packages
+(package-initialize)
+
+;; fetch the list of packages available
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+        (package-install package)))
+
+
+
+
+
+
+
+
+;;(require 'ido)
+;;(require 'python-mode)
+;;(require 'sr-speedbar)
+;;(require 'paren)
 
 (ac-config-default)               ;; turn on auto-complete
 (global-flycheck-mode)            ;; turn on syntax checking
