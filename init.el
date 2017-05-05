@@ -24,7 +24,7 @@
 
 ;; list the packages you want
 (setq package-list
-      '(python-mode ido sr-speedbar paren))
+      '(python-mode ido sr-speedbar paren auto-complete flycheck))
 
 
 ;; activate all the packages
@@ -128,6 +128,9 @@
 ;; ###########################################################################
 ;;                        Color Theme Stuff
 ;; ###########################################################################
+
+;; Before you must to clone theme in folder ~/.emacs.d/themes
+;; git clone https://github.com/sellout/emacs-color-theme-solarized.git
 
 ;; current color theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/emacs-color-theme-solarized")
