@@ -24,29 +24,20 @@
 (package-initialize)
 
 
-;; turn on auto-complete
-(ac-config-default)
-
-(global-flycheck-mode)
-
-(ido-mode t)
+(ac-config-default)               ;; turn on auto-complete
+(global-flycheck-mode)            ;; turn on syntax checking
+(ido-mode t)                      ;; turn on ido-mode
+(set-default 'truncate-lines t)   ;; turn off wrapping for long lines
 
 
 ;; Standard Jedi.el setting
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
-;; (setq jedi:environment-root '("/home/cloud/qtakecloud/env/"))
 
 ;; Type:
 ;;     M-x package-install RET jedi RET
 ;;     M-x jedi:install-server RET
 ;; Then open Python file.
-
-
-
-;; Truncate lines (turn off wrapping for long lines)
-(set-default 'truncate-lines t)
-
 
 
 (custom-set-variables
@@ -106,10 +97,10 @@
 ;; Toggle SrSpeebar
 (global-set-key (kbd "C-c s") 'sr-speedbar-toggle)
 
+
 ;; ###########################################################################
 ;;                        Color Theme Stuff
 ;; ###########################################################################
-
 
 ;; current color theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/emacs-color-theme-solarized")
