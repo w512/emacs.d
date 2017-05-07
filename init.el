@@ -3,7 +3,7 @@
 ;; All rights reserved.
 
 ;;; Commentary:
-;; Do not forget feed cats.
+;; Do not forget to feed cats.
 
 ;;; Code:
 
@@ -19,7 +19,7 @@
 
 ;; list the packages you want
 (setq package-list
-      '(python-mode ido sr-speedbar paren auto-complete flycheck))
+      '(python-mode ido sr-speedbar paren auto-complete flycheck move-text))
 
 ;; activate all the packages
 (package-initialize)
