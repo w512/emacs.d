@@ -19,7 +19,7 @@
 
 ;; list the packages you want
 (setq package-list
-      '(python-mode ido sr-speedbar paren auto-complete flycheck move-text))
+      '(python-mode ido sr-speedbar paren auto-complete flycheck move-text browse-kill-ring))
 
 ;; activate all the packages
 (package-initialize)
