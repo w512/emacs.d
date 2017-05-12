@@ -113,6 +113,12 @@
 ;; Toggle SrSpeebar
 (global-set-key (kbd "C-c s") 'sr-speedbar-toggle)
 
+;; For Wind Move
+(global-set-key (kbd "C-c <left>")  'windmove-left)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+(global-set-key (kbd "C-c <up>")    'windmove-up)
+(global-set-key (kbd "C-c <down>")  'windmove-down)
+
 
 ;; ###########################################################################
 ;;                        Color Theme Stuff
