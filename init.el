@@ -64,6 +64,9 @@
  '(tool-bar-mode nil)
  )
 
+;; Put all backup files go into the one directory
+(setq backup-directory-alist `(("." . "~/.saves")))
+
 ;; Hide Emacs menu sting
 (menu-bar-mode -1)
 (global-hl-line-mode +1)
