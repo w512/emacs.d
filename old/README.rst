@@ -1,4 +1,4 @@
-Nikolay Blohin's Emacs Config
+Nick Blokhin's Emacs Config
 -----------------------------
 
 This is my Emacs configuration with my color theme.
