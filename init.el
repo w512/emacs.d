@@ -7,11 +7,12 @@
 
 ;;; Code:
 
-;; General stuff for packages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+;;
+;; General stuff for packages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;;
 ;; Initialize package sources
 (require 'package)
-
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
                          ("elpa" . "https://elpa.gnu.org/packages/")))
@@ -54,31 +55,36 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; lsp mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+;;
+;; lsp-mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;;
 (require 'lsp-mode)
 
 (use-package lsp-mode
-  :commands lsp)
+  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :hook
+  (lsp-mode . lsp-enable-which-key-integration))
 
-;; for completions
-(use-package company-lsp
-  :after lsp-mode
-  :config (push 'company-lsp company-backends))
 
-
+;;
 ;; web-mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+;;
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.json\\'" . web-mode))
 
 
+;;
 ;; Line numbers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+;;
 (global-display-line-numbers-mode t)
+(column-number-mode t)
 
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
@@ -89,22 +95,25 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 
+;;
 ;; Cursor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+;;
 (blink-cursor-mode 2)
 (setq-default cursor-type 'bar)
 (set-cursor-color "#339933") 
 
 
+;;
 ;; Auto save and backups ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+;;
 (setq make-backup-files nil)          ;; don't make any backup files
 (setq auto-save-default nil)          ;; don't make aout saving
 (setq auto-save-list-file-name nil)   ;; don't make any .saves files
 
 
+;;
 ;; General settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+;;
 (global-set-key (kbd "<escape>")
 				'keyboard-escape-quit)        ;; Make ESC quit prompts
 
@@ -114,14 +123,19 @@
 
 (setq inhibit-startup-message t)              ;; Turn off startup messages
 (setq visible-bell nil)                       ;; Set up the visible bell
+(setq history-delete-duplicates t)            ;; Delete duplicates in history
 (setq-default indent-tabs-mode t)             ;; Use tabs for indentation
 (setq-default tab-width 4)                    ;; Set default tab width
+(setq-default standart-indent 4)              ;; Standart indent size
 (setq-default truncate-lines t)               ;; Don't wrap lines
 (fset 'yes-or-no-p 'y-or-n-p)                 ;; y/n for  answering yes/no questions
 (delete-selection-mode t)                     ;; Delete the selection with a keypress
 (global-auto-revert-mode t)                   ;; Update buffers when files are changed externally
-(setq history-delete-duplicates t)            ;; Delete duplicates in history
+(electric-pair-mode t)                        ;; Autoclose {},[],()
 
+(global-display-fill-column-indicator-mode t)            ;; Show right border
+(setq-default display-fill-column-indicator-column 119)  ;; Border position
+(set-face-foreground 'fill-column-indicator "#004400")   ;; Border color
 
 (global-hl-line-mode t)                       ;; Highlight line with cursor
 (set-face-background 'hl-line "#3e4446")      ;; Highlight color of line with cursor
@@ -142,7 +156,7 @@
 (load-theme 'tangotango t)
 ;; (load-theme 'nord t)
 
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 (defun move-line-up ()
   "Move up the current line."
