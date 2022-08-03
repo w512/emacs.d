@@ -1,5 +1,5 @@
 ;;; init.el --- Emacs initialization file -*- lexical-binding: t -*-
-;; Copyright (c) 2011-2017, Nikolay Blokhin
+;; Copyright (c) 2011-2022, Nick Blokhin
 ;; All rights reserved.
 
 ;;; Commentary:
@@ -7,166 +7,173 @@
 
 ;;; Code:
 
-;; General repository for packages
+;; General stuff for packages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;; Initialize package sources
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
-;; Path to my libs and scripts
-(add-to-list 'load-path "~/.emacs.d/elpa/")
-(add-to-list 'load-path "~/.emacs.d/libs/")
-(add-to-list 'load-path "~/.emacs.d/scripts/")
-
-;; list the packages you want
-(setq package-list
-      '(python-mode ido sr-speedbar paren auto-complete flycheck move-text browse-kill-ring))
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
 
 ;; activate all the packages
 (package-initialize)
 
 ;; fetch the list of packages available
 (unless package-archive-contents
-  (package-refresh-contents))
+ (package-refresh-contents))
+
+;; Initialize use-package on non-Linux platforms
+(unless (package-installed-p 'use-package)
+   (package-install 'use-package))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
+
+;; list the packages you want
+(setq package-list
+      '(web-mode tangotango-theme))
 
 ;; install the missing packages
 (dolist (package package-list)
   (unless (package-installed-p package)
-        (package-install package)))
-
-
-;;(require 'ido)
-;;(require 'python-mode)
-;;(require 'sr-speedbar)
-;;(require 'paren)
-
-
-(ac-config-default)               ;; turn on auto-complete
-(global-flycheck-mode)            ;; turn on syntax checking
-(ido-mode t)                      ;; turn on ido-mode
-(set-default 'truncate-lines t)   ;; turn off wrapping for long lines
-
-
-;; Standard Jedi.el setting
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
-
-;; Type:
-;;     M-x package-install RET jedi RET
-;;     M-x jedi:install-server RET
-;; Then open Python file.
+	(package-install package)))
 
 
 (custom-set-variables
- '(global-linum-mode t)
- '(inhibit-startup-screen t)
- '(require-final-newline t)
- '(scroll-bar-mode nil)
- '(tool-bar-mode nil)
- )
-
-;; Put all backup files go into the one directory
-(setq backup-directory-alist `(("." . "~/.saves")))
-
-;; Hide Emacs menu sting
-(menu-bar-mode -1)
-(global-hl-line-mode +1)
-
-;; see matching pairs of parentheses and other characters
-(show-paren-mode 1)
-(set-face-background 'show-paren-match (face-background 'default))
-(set-face-foreground 'show-paren-match "#d700d7")
-    (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
-
-
-;; Show the column and line numbers
-(setq line-number-mode t)
-(setq column-number-mode t)
-(setq linum-format "%4d ")
-
-;; For JavaScript
-(setq js-indent-level 4)
-(setq js-switch-indent-offset 4)
-(setq-default indent-tabs-mode nil)
-
-
-
-;; scroll one line at a time (less "jumpy" than defaults)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
-(setq mouse-wheel-progressive-speed nil)            ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse 't)                  ;; scroll window under mouse
-(setq scroll-step 1)                                ;; keyboard scroll one line at a time
-
-
-;;no extra whitespace after lines
-(add-hook 'before-save-hook 'whitespace-cleanup)
-
-
-;; HTML indenting
-(add-hook 'html-mode-hook
-    (lambda ()
-        ;; Default indentation is usually 2 spaces, changing to 4.
-        (set (make-local-variable 'sgml-basic-offset) 4)))
-
-
-;; ############################################################################
-;;                          Setup Shortcuts
-;; ############################################################################
-
-;; Show "buffer" with "cuts"
-(global-set-key "\M-y" 'browse-kill-ring)
-
-;; Move line or block up/down
-(global-set-key "\M-n" 'move-text-down)
-(global-set-key "\M-p" 'move-text-up)
-
-;; Toggle SrSpeebar
-(global-set-key (kbd "C-c s") 'sr-speedbar-toggle)
-
-;; For Wind Move
-(global-set-key (kbd "C-c <left>")  'windmove-left)
-(global-set-key (kbd "C-c <right>") 'windmove-right)
-(global-set-key (kbd "C-c <up>")    'windmove-up)
-(global-set-key (kbd "C-c <down>")  'windmove-down)
-
-
-;; ###########################################################################
-;;                        Color Theme Stuff
-;; ###########################################################################
-
-;; Before you must to clone theme in folder ~/.emacs.d/themes
-;; git clone https://github.com/sellout/emacs-color-theme-solarized.git
-
-;; current color theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/emacs-color-theme-solarized")
-(load-theme 'solarized t)
-
-
-;; Add syntax highlighting for operators ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;; Currently support for []|&!.+=-/%*,()<>{}
-(font-lock-add-keywords
- 'python-mode '(("\\(\\[\\|\\]\\|[|!\\.\\+\\=\\&]\\|-\\|\\/\\|\\:\\|\\%\\|\\*\\|,\\|(\\|)\\|>\\ |<\\|{\\|}\\)" 1 font-lock-operator-face )
-                ("\\(;\\)" 1 font-lock-end-statement )))
-
-(make-face 'font-lock-operator-face)
-(make-face 'font-lock-end-statement)
-(setq font-lock-operator-face 'font-lock-operator-face)
-(setq font-lock-end-statement 'font-lock-end-statement)
-;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-;; Setup my custom colors, but Emacs must be run through
-;; color preset "Solarized Dark" in iTerm2
-;; Color names got from this site:  https://jonasjacek.github.io/colors/
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(web-mode tangotango-theme nord-theme company-lsp lsp-mode use-package)))
 (custom-set-faces
- '(font-lock-function-name-face ((t (:foreground "Gold1"))))
- '(font-lock-keyword-face ((t (:foreground "SteelBlue1"))))
- '(font-lock-string-face ((t (:foreground "#00af5f"))))
- '(font-lock-type-face ((t (:foreground "Orange1" :bold t))))
- '(font-lock-builtin-face ((t (:foreground "SlateBlue3"))))
- '(font-lock-variable-name-face ((t (:foreground "#949494"))))
- '(font-lock-comment-face ((t (:foreground "#559fff"))))
- '(font-lock-operator-face ((t (:foreground "#d7af00"))))
- '(py-decorators-face ((t (:foreground "#ad7fa8" :bold t))))
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
+
+;; lsp mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(require 'lsp-mode)
+
+(use-package lsp-mode
+  :commands lsp)
+
+;; for completions
+(use-package company-lsp
+  :after lsp-mode
+  :config (push 'company-lsp company-backends))
+
+
+;; web-mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+
+
+;; Line numbers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(global-display-line-numbers-mode t)
+
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                shell-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+
+;; Cursor ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(blink-cursor-mode 2)
+(setq-default cursor-type 'bar)
+(set-cursor-color "#339933") 
+
+
+;; Auto save and backups ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(setq make-backup-files nil)          ;; don't make any backup files
+(setq auto-save-default nil)          ;; don't make aout saving
+(setq auto-save-list-file-name nil)   ;; don't make any .saves files
+
+
+;; General settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(global-set-key (kbd "<escape>")
+				'keyboard-escape-quit)        ;; Make ESC quit prompts
+
+(set-face-attribute 'default nil
+					:family "JetBrains Mono"
+					:height 140)              ;; Setup font
+
+(setq inhibit-startup-message t)              ;; Turn off startup messages
+(setq visible-bell nil)                       ;; Set up the visible bell
+(setq-default indent-tabs-mode t)             ;; Use tabs for indentation
+(setq-default tab-width 4)                    ;; Set default tab width
+(setq-default truncate-lines t)               ;; Don't wrap lines
+(fset 'yes-or-no-p 'y-or-n-p)                 ;; y/n for  answering yes/no questions
+(delete-selection-mode t)                     ;; Delete the selection with a keypress
+(global-auto-revert-mode t)                   ;; Update buffers when files are changed externally
+(setq history-delete-duplicates t)            ;; Delete duplicates in history
+
+
+(global-hl-line-mode t)                       ;; Highlight line with cursor
+(set-face-background 'hl-line "#3e4446")      ;; Highlight color of line with cursor
+
+
+(if (display-graphic-p)
+    (progn
+      (scroll-bar-mode -1)          ; Disable visible scrollbar
+      (tool-bar-mode -1)            ; Disable the toolbar
+      (menu-bar-mode -1)))          ; Disable the menu bar
+
+
+(require 'ido)
+(ido-mode t)
+(setq ido-enable-flex-matching t)
+
+
+(load-theme 'tangotango t)
+;; (load-theme 'nord t)
+
+;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(defun move-line-up ()
+  "Move up the current line."
+  (interactive)
+  (transpose-lines 1)
+  (forward-line -2)
+  (indent-according-to-mode))
+
+(defun move-line-down ()
+  "Move down the current line."
+  (interactive)
+  (forward-line 1)
+  (transpose-lines 1)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(defun duplicate-line()
+  "Duplicate the current line."
+  (interactive)
+  (move-beginning-of-line 1)
+  (kill-line)
+  (yank)
+  (open-line 1)
+  (next-line 1)
+  (yank)
+)
+
+(global-set-key [(control super up)]  'move-line-up)
+(global-set-key [(control super down)]  'move-line-down)
+(global-set-key [(super shift d)] 'duplicate-line)
+
+
 
 ;;; init.el ends here
