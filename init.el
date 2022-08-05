@@ -33,7 +33,7 @@
 
 ;; list the packages you want
 (setq package-list
-      '(web-mode tangotango-theme))
+      '(web-mode tangotango-theme doom-themes))
 
 ;; install the missing packages
 (dolist (package package-list)
@@ -47,26 +47,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(web-mode tangotango-theme nord-theme company-lsp lsp-mode use-package)))
+   '(doom-themes web-mode tangotango-theme nord-theme use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-
-;;
-;; lsp-mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;;
-(require 'lsp-mode)
-
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :hook
-  (lsp-mode . lsp-enable-which-key-integration))
 
 
 ;;
@@ -119,7 +106,9 @@
 
 (set-face-attribute 'default nil
 					:family "JetBrains Mono"
-					:height 140)              ;; Setup font
+					:height 180)              ;; Setup font
+
+(setq line-spacing 0.3)					      ;;  space to put between lines
 
 (setq inhibit-startup-message t)              ;; Turn off startup messages
 (setq visible-bell nil)                       ;; Set up the visible bell
@@ -153,8 +142,26 @@
 (setq ido-enable-flex-matching t)
 
 
-(load-theme 'tangotango t)
+;; (load-theme 'tangotango t)
 ;; (load-theme 'nord t)
+
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold nil    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-spacegrey t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 ;; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
