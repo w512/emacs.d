@@ -98,6 +98,9 @@
 ;;
 ;; General settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;;
+
+(desktop-save-mode 1)                         ;; Save editor state between loads
+
 (global-set-key (kbd "<escape>")
 				'keyboard-escape-quit)        ;; Make ESC quit prompts
 
@@ -210,7 +213,7 @@
   "Face name to use for punctuation.")
 
 (defface font-lock-punctuation-face
-  '((t (:foreground "#ffff00")))
+  '((t (:foreground "#9C640C")))
   "Font Lock mode face used to highlight punctuation."
   :group 'font-lock-faces)
 
@@ -218,7 +221,8 @@
         (font-lock-add-keywords
          mode
          '(
-           ("\\({\\|}\\|[\\|]\\|(\\|)\\)" 0 'font-lock-punctuation-face prepend)
+           ("\\({\\|}\\|\\[\\|\\]\\|(\\|)\\)" 0 'font-lock-punctuation-face prepend)
+           ("\\( < \\| > \\|/\\|\\.\\|@\\|\\,\\|\\*\\)" 0 'font-lock-punctuation-face prepend)
            ("\\(:\\|=\\|;\\|\\+\\| - \\|\\-=\\|\\+=\\|>=\\|<=\\|!=\\|!==\\|=>\\)" 0 'font-lock-punctuation-face prepend)
            ;("TODO:" 0 'font-lock-punctuation-face prepend)
            ;("{%.*?block.*?%}" 0 'sm/django-block-face prepend)
