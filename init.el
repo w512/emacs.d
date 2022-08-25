@@ -12,49 +12,84 @@
 (setq custom-file (locate-user-emacs-file "custom-vars.el"))
 (load custom-file 'noerror 'nomessage)
 
+
 ;;
 ;; General stuff for packages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;;
-;; Initialize package sources
-(require 'package)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
 
-;; activate all the packages
+;; Initialize package sources
 (package-initialize)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives
+             '("org" . "http://orgmode.org/elpa/"))
+(add-to-list 'package-archives
+             '("gnu" . "https://elpa.gnu.org/packages/"))
+
+;; a list of packages that I use and which should be installed
+(setq my-package-list
+	  '(
+		package
+		use-package
+		tangotango-theme
+		doom-themes
+		ido
+		all-the-icons
+		web-mode
+		lsp-mode
+		company
+        ))
+
+;; install any packages in my-package-list, if they are not installed already
+(let ((refreshed nil))
+  (when (not package-archive-contents)
+    (package-refresh-contents)
+    (setq refreshed t))
+  (dolist (pkg my-package-list)
+    (when (and (not (package-installed-p pkg))
+             (assoc pkg package-archive-contents))
+      (unless refreshed
+        (package-refresh-contents)
+        (setq refreshed t))
+      (package-install pkg))))
 
 ;; fetch the list of packages available
 (unless package-archive-contents
  (package-refresh-contents))
 
-;; Initialize use-package on non-Linux platforms
-(unless (package-installed-p 'use-package)
-   (package-install 'use-package))
-
-(require 'use-package)
 (setq use-package-always-ensure t)
-
-;; list the packages you are used
-(setq package-list
-      '(web-mode tangotango-theme doom-themes all-the-icons))
-
-;; install the missing packages
-(dolist (package package-list)
-  (unless (package-installed-p package)
-	(package-install package)))
 
 
 ;;
 ;; web-mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;;
-
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.json\\'" . web-mode))
+
+(add-hook 'web-mode-hook  'web-mode-use-tabs)
+
+
+;;
+;; lsp-mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;;
+(use-package lsp-mode
+:commands (lsp lsp-deferred)
+:init
+(setq lsp-keymap-prefix "C-c l")
+(setq lsp-completion-enable t)
+:hook
+((go-mode) . lsp))
+
+
+;;
+;; company-mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;;
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
 
 
 ;;
