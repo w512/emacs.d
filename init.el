@@ -38,6 +38,7 @@
 		web-mode
 		lsp-mode
 		company
+    yasnippet
         ))
 
 ;; install any packages in my-package-list, if they are not installed already
@@ -76,20 +77,31 @@
 ;;
 ;; lsp-mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;;
+;; On the host machine should be installed:
+;;   for 'web-mode' (Vue Language Server and Typescript):
+;;      npm install -g typescript
+;;      npm install vls -g
+;;
+;;   for 'go-mode' (Go language server):
+;;      brew install gopls
+
 (use-package lsp-mode
 :commands (lsp lsp-deferred)
 :init
 (setq lsp-keymap-prefix "C-c l")
 (setq lsp-completion-enable t)
 :hook
-((go-mode) . lsp))
+(
+ (go-mode . lsp)
+ (web-mode . lsp)
+))
 
 
 ;;
 ;; company-mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;;
 (require 'company)
-(add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'after-init-hook 'prog-company-mode)
 
 
 ;;
